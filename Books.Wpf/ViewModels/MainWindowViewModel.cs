@@ -1,5 +1,6 @@
 ﻿using Books.Core.Contracts;
 using Books.Core.DataTransferObjects;
+using Books.Core.Entities;
 using Books.Persistence;
 using Books.Wpf.Common;
 using Books.Wpf.DataTransferObjects;
@@ -9,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Books.Wpf.ViewModels
 {
@@ -46,6 +48,10 @@ namespace Books.Wpf.ViewModels
         {
         }
 
+        public ICommand CommandCreateBook { get; set; }
+        public ICommand CommandEditBook { get; set; }
+        public ICommand CommandDeleteBook { get; set; }
+
         public MainWindowViewModel(IWindowController windowController) : base(windowController)
         {
             Books = new ObservableCollection<BookDto>();
@@ -55,11 +61,52 @@ namespace Books.Wpf.ViewModels
 
         private void LoadCommands()
         {
+            CommandDeleteBook = new RelayCommand( async _ => await DeleteBook(), _ => SelectedBook != null);
+            CommandEditBook = new RelayCommand(async _ => await EditBook(), _ => SelectedBook != null);
+            CommandCreateBook = new RelayCommand(async _ => await CreateBook(), _ => SelectedBook != null);
+        }
+
+     /*   public ICommand CmdDeleteBook
+        {
+            get
+            {
+                if (_commandDeleteBook == null)
+                {
+                    _commandDeleteBook = new RelayCommand(
+                        execute: _ =>
+                        {
+                            DeleteBook();
+                        },
+                        canExecute: _ => SelectedBook != null);
+
+                }
+                return _commandDeleteBook;
+            }
+        }*/
+
+        private async Task DeleteBook()
+        {
+            await using var uow = new UnitOfWork();
+            await uow.Books.DeleteAsync(SelectedBook.Entity);
+            await uow.SaveChangesAsync();
+            await LoadBooks();
+        }
+
+        private async Task EditBook()
+        {
+            Controller.ShowWindow(new BookEditCreateViewModel(Controller, SelectedBook.Entity));
+            await LoadBooks();
+        }
+
+        private async Task CreateBook()
+        {
+            Controller.ShowWindow(new BookEditCreateViewModel(Controller, new Book()));
+            await LoadBooks();
+
         }
 
 
-
-         /// <summary>
+        /// <summary>
         /// Lädt die gefilterten Buchdaten
         /// </summary>
         public async Task LoadBooks()

@@ -37,6 +37,11 @@ namespace Books.Persistence
 
         }
 
+       public async Task DeleteAsync(Book entity)
+        {
+            _dbContext.Books.Remove(entity);
+        }
+
     }
 
 }

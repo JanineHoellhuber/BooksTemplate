@@ -19,6 +19,7 @@ namespace Books.Wpf.Common
         null => throw new ArgumentNullException(nameof(viewModel)),
 
         MainWindowViewModel _ => new MainWindow(),
+        BookEditCreateViewModel _ => new BookEditCreateWindow(),
 
         // default -> InvalidOperationException
         _ => throw new InvalidOperationException($"Unbekanntes ViewModel '{viewModel}'"),
