@@ -9,5 +9,6 @@ namespace Books.Core.Contracts
         Task AddRangeAsync(IEnumerable<Book> books);
         Task<IEnumerable<Book>> GetFilteredBooksAsync(string bookFilterText, bool orderByPublishers);
         Task DeleteAsync(Book entity);
+        Task<IEnumerable<Book>> GetFilteredByTitleAsync(string title);
     }
 }

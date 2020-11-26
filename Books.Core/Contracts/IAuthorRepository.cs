@@ -7,5 +7,8 @@ namespace Books.Core.Contracts
 {
     public interface IAuthorRepository
     {
+        void Add(Author author);
+        Task<AuthorDto[]> GetAuthorsOverviewAsync();
+        Task<AuthorDto> GetById(int value);
     }
 }

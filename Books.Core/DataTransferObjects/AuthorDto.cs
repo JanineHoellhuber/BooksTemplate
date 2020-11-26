@@ -15,6 +15,8 @@ namespace Books.Core.DataTransferObjects
 
         public IEnumerable<Book> Books { get; set; }
 
+        public IEnumerable<string> PublisherName { get; set; }
+
         public string Publishers { get; set; }
     }
 }

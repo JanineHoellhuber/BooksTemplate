@@ -18,8 +18,4 @@
     <ProjectReference Include="..\Books.Persistence\Books.Persistence.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DataTransferObjects\" />
-  </ItemGroup>
-
 </Project>

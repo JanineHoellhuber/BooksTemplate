@@ -8,22 +8,22 @@ using System.Threading.Tasks;
 
 namespace Books.Persistence
 {
-  public class BookRepository : IBookRepository
-  {
-    private readonly ApplicationDbContext _dbContext;
-
-    public BookRepository(ApplicationDbContext dbContext)
+    public class BookRepository : IBookRepository
     {
-      _dbContext = dbContext;
-    }
+        private readonly ApplicationDbContext _dbContext;
 
-    public async Task AddRangeAsync(IEnumerable<Book> books)
-    {
-             await _dbContext.AddRangeAsync(books);
-    }
+        public BookRepository(ApplicationDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
-    public async Task<IEnumerable<Book>> GetFilteredBooksAsync(string bookFilterText, bool orderByPublishers)
-    {
+        public async Task AddRangeAsync(IEnumerable<Book> books)
+        {
+            await _dbContext.AddRangeAsync(books);
+        }
+
+        public async Task<IEnumerable<Book>> GetFilteredBooksAsync(string bookFilterText, bool orderByPublishers)
+        {
             IQueryable<Book> books = _dbContext.Books
                 .Include(b => b.BookAuthors)
                 .ThenInclude(ba => ba.Author);
@@ -37,11 +37,21 @@ namespace Books.Persistence
 
         }
 
-       public async Task DeleteAsync(Book entity)
+        public async Task DeleteAsync(Book entity)
         {
             _dbContext.Books.Remove(entity);
         }
 
-    }
 
+
+        public async Task<IEnumerable<Book>> GetFilteredByTitleAsync(string title)
+        {
+            title = title.ToUpper();
+            return await _dbContext.Books
+                .Where(b => b.Title.ToUpper().Contains(title))
+                .ToListAsync();
+        }
+
+
+    } 
 }

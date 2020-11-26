@@ -19,9 +19,11 @@ namespace Books.Web.Pages
       _uow = uow;
     }
 
-    public IActionResult OnGet()
+    public AuthorDto[] Authors { get; set; } 
+    public async Task<IActionResult> OnGet()
     {
-      return Page();
+            Authors = await _uow.Authors.GetAuthorsOverviewAsync();
+            return Page();
     }
   }
 }

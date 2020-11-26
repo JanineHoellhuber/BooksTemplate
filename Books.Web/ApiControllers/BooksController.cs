@@ -1,6 +1,8 @@
 ﻿using Books.Core.Contracts;
+using Books.Web.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Books.Web.ApiControllers
@@ -27,9 +29,17 @@ namespace Books.Web.ApiControllers
     // GET: api/books/<title>
     [Route("{title}")]
     [HttpGet]
-    public Task<IActionResult> GetBooks(string title)
+    public async Task<IActionResult> GetBooks(string title)
     {
-      throw new NotImplementedException();
+            var books = await _uow.Books.GetFilteredByTitleAsync(title);
+
+            var bookDto = books.Select(b => new BookDto(b)).ToList();
+
+            if (!bookDto.Any())
+            {
+                return NotFound();
+            }
+            return Ok(bookDto);
     }
   }
 }

@@ -23,7 +23,21 @@
     </tr>
   </thead>
   <tbody>
-    
+      @foreach (var item in Model.AuthorInfo.Books)
+      {
+          <tr>
+              <td>
+                  @Html.DisplayFor(modelItem => item.Title)
+              </td>
+              <td>
+                  @Html.DisplayFor(modelItem => item.Isbn)
+              </td>
+              <td>
+                  @Html.DisplayFor(modelItem => item.Publishers)
+              </td>
+
+          </tr>
+      }
 </table>
 <div>
   <a asp-page="../Index">Zurück zur Liste</a>

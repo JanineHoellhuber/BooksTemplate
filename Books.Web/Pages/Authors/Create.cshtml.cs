@@ -21,9 +21,28 @@ namespace Books.Web.Pages.Authors
     }
 
     // POST: Authors/Create
-    public Task<IActionResult> OnPost()
+    public async Task<IActionResult> OnPost()
     {
-      throw new NotImplementedException();
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            var author = new Author();
+            author.Name = Author;
+
+            _uow.Authors.Add(author);
+
+            try
+            {
+                await _uow.SaveChangesAsync();
+            }
+            catch(ValidationException ve)
+            {
+                ModelState.AddModelError("", ve.Message);
+                return Page();
+            }
+            return RedirectToPage("../Index");
     }
   }
 }

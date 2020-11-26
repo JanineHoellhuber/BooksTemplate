@@ -1,31 +1,53 @@
 ﻿@page
 @model IndexModel
 @{
-  ViewData["Title"] = "Autorenübersicht";
+    ViewData["Title"] = "Autorenübersicht";
 }
 
 <h1>Autorenübersicht</h1>
 
 <p>
-  <a class="btn btn-primary" asp-page="Authors/Create">Autor/in Hinzufügen</a>
+    <a class="btn btn-primary" asp-page="Authors/Create">Autor/in Hinzufügen</a>
 </p>
 <table class="table">
-  <thead>
-    <tr>
-      <th>
-        Autor/in
-      </th>
-      <th>
-        Anzahl Bücher
-      </th>
-      <th>
-        Verleger
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    
-  </tbody>
+    <thead>
+        <tr>
+            <th>
+                Autor/in
+            </th>
+            <th>
+                Anzahl Bücher
+            </th>
+            <th>
+                Verleger
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+    @foreach (var item in Model.Authors)
+    {
+        <tr>
+            <td>
+                @if (item.BookCount > 0)
+                {
+                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Author)</a>
+                }
+                else
+                {
+                    @Html.DisplayFor(modelItem => item.Author)
+                }
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Publishers)
+            </td>
+        </tr>
+    }
+    </tbody>
 </table>
 
 

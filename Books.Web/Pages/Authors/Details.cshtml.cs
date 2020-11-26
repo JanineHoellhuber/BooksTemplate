@@ -12,14 +12,23 @@ namespace Books.Web.Pages.Authors
 
     public AuthorDto AuthorInfo { get; set; }
 
-    public DetailsModel(IUnitOfWork uow)
+
+        public DetailsModel(IUnitOfWork uow)
     {
       _uow = uow;
     }
 
-    public IActionResult OnGet(int? id)
+    public async Task<IActionResult> OnGet(int? id)
     {
-      return Page();
-    }
+            
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            AuthorInfo = await _uow.Authors.GetById(id.Value);
+
+            return Page();
+    } 
   }
 }
