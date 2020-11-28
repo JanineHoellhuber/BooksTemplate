@@ -4,6 +4,7 @@ using Books.Wpf.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
 
 namespace Books.Wpf.DataTransferObjects
@@ -23,6 +24,18 @@ namespace Books.Wpf.DataTransferObjects
             Title = book.Title;
             Isbn = book.Isbn;
             Publishers = book.Publishers;
+            var authors = book.BookAuthors.Select(ba => ba.Author).ToArray();
+            var authorsNames = new StringBuilder();
+            for (var i = 0; i < authors.Length; i++)
+            {
+                var author = authors[i];
+                authorsNames.Append($"{author.Name}");
+                if (i + 1 < authors.Length)
+                {
+                    authorsNames.Append(" / ");
+                }
+            }
+            AuthorNames = authorsNames.ToString();
         }
 
         public BookDto() : this(new Book())

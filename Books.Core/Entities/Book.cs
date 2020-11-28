@@ -48,10 +48,11 @@ namespace Books.Core.Entities
             }
             if (isbn.Length != 10)
             {
-                throw new Exception("Isbn has no length of 10");
+                Debug.WriteLine($"!!! isbn {isbn} has no length of 10!");
+                return false;
             }
+            int weight = 10;  // Startgewicht
             int sum = 0;
-            int weight = 10;
             for (int i = 0; i < 10; i++)
             {
                 var ch = isbn[i];
@@ -60,7 +61,7 @@ namespace Books.Core.Entities
                 {
                     number = ch - '0';
                 }
-                else
+                else  // keine Ziffer  => x oder X an letzter Stelle
                 {
                     if (i != 9)
                     {
@@ -75,34 +76,33 @@ namespace Books.Core.Entities
                         return false;
                     }
                 }
+                // zahl enthält gültigen Wert
                 sum += number * weight;
                 weight--;
             }
             if (sum % 11 != 0)
             {
-                throw new Exception($"!!! isbn {isbn} checksum is {sum % 11} (should be 0!");
+                Debug.WriteLine($"!!! isbn {isbn} checksum is {sum % 11} (should be 0!");
             }
             return (sum % 11) == 0;
-        
-    
-                
-    }
+        }
 
 
-    public override string ToString()
-    {
-      return $"{Title} {Isbn} mit {BookAuthors.Count()} Autoren";
-    }
+        public override string ToString()
+        {
+            return $"{Title} {Isbn} mit {BookAuthors.Count()} Autoren";
+        }
 
-    /// <inheritdoc />
-    /// <summary>
-    /// Jedes Buch muss zumindest einen Autor haben.
-    /// Weiters darf ein Autor einem Buch nicht mehrfach zugewiesen
-    /// werden.
-    /// </summary>
-    /// <param name="validationContext"></param>
-    /// <returns></returns>
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Jedes Buch muss zumindest einen Autor haben.
+        /// Weiters darf ein Autor einem Buch nicht mehrfach zugewiesen
+        /// werden.
+        /// </summary>
+        /// <param name="validationContext"></param>
+        /// <returns></returns>
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
             if(BookAuthors.Count == 0)
             {

@@ -19,14 +19,14 @@
 
         <StackPanel Grid.Row="0">
             <TextBlock>Suche nach Titel:</TextBlock>
-            <TextBox Height="20" Text="{Binding Path=BookFilterText}" TextChanged="TextBoxTitleFilter_OnTextChanged" ></TextBox>
+            <TextBox Height="20" Text="{Binding Path=BookFilterText, UpdateSourceTrigger=PropertyChanged}" TextChanged="TextBoxTitleFilter_OnTextChanged" ></TextBox>
             
         </StackPanel>
 
         <DataGrid Grid.Row="1" ItemsSource="{Binding Books}" IsReadOnly="True" AutoGenerateColumns="False" SelectedItem="{Binding SelectedBook}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Titel" Binding="{Binding Path=Title, UpdateSourceTrigger=PropertyChanged}"/>
-                <DataGridTextColumn Header="Autoren" Binding="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Autoren" Binding="{Binding Path=AuthorNames, UpdateSourceTrigger=PropertyChanged}"/>
                 <DataGridTextColumn Header="Verlag" Binding="{Binding Path=Publishers, UpdateSourceTrigger=PropertyChanged}"/>
                 <DataGridTextColumn Header="Isbn" Binding="{Binding Path=Isbn, UpdateSourceTrigger=PropertyChanged}"/>
             </DataGrid.Columns>

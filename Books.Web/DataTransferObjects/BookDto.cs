@@ -1,4 +1,5 @@
 ﻿using Books.Core.Entities;
+using Books.Wpf.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Books.Web.DataTransferObjects
 {
-    public class BookDto
+    public class BookDto : NotifyPropertyChanged
     {
 
         public BookDto(Book book)

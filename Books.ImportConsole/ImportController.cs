@@ -35,9 +35,11 @@ namespace Books.ImportConsole
                         Book = books.Single(b => b.Isbn == line[3])
                     })
                 .ToList();
-
+            books.ForEach(book => book.BookAuthors =
+                  bookAuthors.Where(ba => ba.Book == book).ToList());
             return books;
 
     }
-  }
+      
+    }
 }

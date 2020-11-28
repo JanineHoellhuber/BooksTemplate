@@ -33,7 +33,7 @@ namespace Books.Persistence
             }
             books = orderByPublishers ? books.OrderBy(b => b.Publishers) : books.OrderBy(b => b.Title);
 
-            return await books.ToListAsync();
+            return await books.Take(20).ToListAsync();
 
         }
 
@@ -51,7 +51,20 @@ namespace Books.Persistence
                 .Where(b => b.Title.ToUpper().Contains(title))
                 .ToListAsync();
         }
+        public void Update(Book book)
+        {
+            _dbContext
+             .Books
+             .Update(book);
+        }
 
 
-    } 
+        public async Task<Book> GetByIdWithAuthorsAsync(int id)
+        {
+            return await _dbContext.Books
+                .Include(b => b.BookAuthors)
+                .SingleOrDefaultAsync(b => b.Id == id);
+        }
+
+    }
 }

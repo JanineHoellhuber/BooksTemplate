@@ -10,5 +10,7 @@ namespace Books.Core.Contracts
         Task<IEnumerable<Book>> GetFilteredBooksAsync(string bookFilterText, bool orderByPublishers);
         Task DeleteAsync(Book entity);
         Task<IEnumerable<Book>> GetFilteredByTitleAsync(string title);
+        void Update(Book book);
+        Task<Book> GetByIdWithAuthorsAsync(int id);
     }
 }

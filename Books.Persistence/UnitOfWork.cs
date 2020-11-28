@@ -42,7 +42,7 @@ namespace Books.Persistence
           .Select(e => e.Entity);
       foreach (var entity in entities)
       {
-        //await ValidateEntity(entity);
+        await ValidateEntity(entity);
       }
       return await _dbContext.SaveChangesAsync();
     }

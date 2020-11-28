@@ -16,11 +16,9 @@ namespace Books.Wpf.ViewModels
 {
   public class MainWindowViewModel : BaseViewModel
     {
-        // public ObservableCollection<BookDto> _books;
 
         private string _bookFilterText;
         private BookDto _selectedBook;
-      //  private ObservableCollection<AuthorDto> _books;
 
         public string BookFilterText
         {
@@ -42,7 +40,7 @@ namespace Books.Wpf.ViewModels
             }
         }
 
-        private ObservableCollection<BookDto> Books{  get; }
+        public ObservableCollection<BookDto> Books{  get; }
 
         public MainWindowViewModel() : base(null)
         {
@@ -63,7 +61,7 @@ namespace Books.Wpf.ViewModels
         {
             CommandDeleteBook = new RelayCommand( async _ => await DeleteBook(), _ => SelectedBook != null);
             CommandEditBook = new RelayCommand(async _ => await EditBook(), _ => SelectedBook != null);
-            CommandCreateBook = new RelayCommand(async _ => await CreateBook(), _ => SelectedBook != null);
+            CommandCreateBook = new RelayCommand(async _ => await CreateBook(), _ => true);
         }
 
      /*   public ICommand CmdDeleteBook
@@ -111,7 +109,7 @@ namespace Books.Wpf.ViewModels
         /// </summary>
         public async Task LoadBooks()
         {
-            await using IUnitOfWork uow = new UnitOfWork();
+            await using var uow = new UnitOfWork();
 
             var books = await uow.Books.GetFilteredBooksAsync(BookFilterText, false);
             var bookDtos = books.Select(b => new BookDto(b));

@@ -40,15 +40,15 @@ namespace Books.ImportConsole
             var validBooks = new List<Book>();
             books.ForEach(book =>
             {
-               // var validationResults = new List<ValidationResult>();
-               /* if (Validator.TryValidateObject(book, new ValidationContext(book), validationResults, true))
-                {*/
+                var validationResults = new List<ValidationResult>();
+                if (Validator.TryValidateObject(book, new ValidationContext(book), validationResults, true))
+                {
                     validBooks.Add(book);
-               /* }
+               }
                 else
                 {
                     validationResults.ForEach(Console.WriteLine);
-                }*/
+                }
             });
             Console.WriteLine($"  Nur {validBooks.Count} Bücher sind valide!");
             var authors = validBooks.SelectMany(b => b.BookAuthors).Select(ba => ba.Author).Distinct();

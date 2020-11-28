@@ -11,5 +11,61 @@
         WindowStyle="ThreeDBorderWindow" BorderThickness="2" 
         BorderBrush="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" ResizeMode="NoResize">
 
-  
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto" MinWidth="183"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Label Content="Titel:"  Grid.Row="0" Grid.Column="0" Margin="3"/>
+        <Label Content="Verlag:" Grid.Row="1" Grid.Column="0" Margin="3"/>
+        <Label Content="Autoren:" Grid.Row="2" Grid.Column="0" Margin="3"/>
+        <Label Content="Isbn:" Grid.Row="3" Grid.Column="0" Margin="3"/>
+        <Label  
+            Style="{StaticResource ErrorFontColorStyle}"
+            VerticalContentAlignment="Center"
+            Margin="0,5,5,5"
+            Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="4" 
+            Content="{Binding DbError}" HorizontalAlignment="Left"></Label>
+        <Button Command="{Binding CommandSaveBook}"
+                Content="Buch Speichern" Grid.Column="3" Grid.Row="4" 
+                Margin="3" VerticalAlignment="Top" />
+        <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
+                 VerticalContentAlignment="Center"
+                 Grid.Row="0" Grid.Column="1" TextWrapping="Wrap" Margin="3" Grid.ColumnSpan="2" Width="500"/>
+        <ComboBox x:Name="ComboBoxPublishers" 
+                  ItemsSource="{Binding AllPublishers}"
+                  SelectedItem="{Binding BookPublishers}"
+                  Grid.Column="1" Grid.Row="1" Margin="3" Grid.ColumnSpan="2"/>
+        <ListBox Name="SelectedAuthorsListBox" DisplayMemberPath="Name"
+                  ItemsSource="{Binding SelectedAuthors}"
+                  SelectedItem="{Binding SelectedAuthorToRemove}"
+                 Grid.Column="1" Grid.Row="2" Margin="3,3,3,3" MinHeight="100" BorderThickness="1"/>
+        <ComboBox DisplayMemberPath="Name"
+                  ItemsSource="{Binding AvailableAuthors}"
+                  SelectedItem="{Binding SelectedAuthorToAdd}"
+                  Grid.Column="2" Grid.Row="2" Margin="3" MaxHeight="26" VerticalAlignment="Top" MinWidth="200" MaxWidth="250"/>
+        <StackPanel Grid.Column="3" Margin="3,3,3,80" Orientation="Vertical" Grid.Row="2">
+            <Button Content="Hinzufügen" Margin="3,3,3,0" MaxHeight="25" 
+                    Command="{Binding CommandAddAuthor}"
+                    VerticalAlignment="Top" Width="80" 
+                    IsEnabled="{Binding IsAuthorToAddSelected}"/>
+            <Button Content="Entfernen"  Margin="3,3,3,0" 
+                    VerticalAlignment="Top" Width="80"  Height="25"
+                    Command="{Binding CommandRemoveAuthor}"
+                    IsEnabled="{Binding ElementName=SelectedAuthorsListBox, Path=SelectedItems.Count}"/>
+        </StackPanel>
+        <TextBox Text="{Binding Isbn, UpdateSourceTrigger=PropertyChanged}"
+                 VerticalContentAlignment="Center"
+                 Grid.Column="1" Grid.Row="3" TextWrapping="Wrap" Margin="3"/>
+    </Grid>
+    
 </controls:MetroWindow>

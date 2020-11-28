@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Books.Core\Books.Core.csproj" />
     <ProjectReference Include="..\Books.Persistence\Books.Persistence.csproj" />
+    <ProjectReference Include="..\Books.Wpf\Books.Wpf.csproj" />
   </ItemGroup>
 
 </Project>
