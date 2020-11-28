@@ -47,6 +47,12 @@ namespace Books.Persistence
                 }).SingleOrDefaultAsync();
         }
 
+        public async Task<IEnumerable<Author>> GetAllAsync()
+        {
+            return await _dbContext.Authors
+               .OrderBy(a => a.Name)
+               .ToListAsync();
+        }
 
 
     }

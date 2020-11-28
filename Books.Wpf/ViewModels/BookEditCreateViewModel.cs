@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -44,7 +45,7 @@ namespace Books.Wpf.ViewModels
             set
             {
                 _title = value;
-                OnPropertyChanged(nameof(Title));
+                OnPropertyChanged(nameof(IsToSave));
                 ValidateViewModelProperties();
             }
         }
@@ -55,7 +56,7 @@ namespace Books.Wpf.ViewModels
             set
             {
                 _bookPublishers = value;
-                OnPropertyChanged(nameof(_bookPublishers));
+                OnPropertyChanged();
                 ValidateViewModelProperties();
             }
         }
@@ -66,7 +67,7 @@ namespace Books.Wpf.ViewModels
             set
             {
                 _isbn = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsToSave));
                 ValidateViewModelProperties();
             }
         }
@@ -77,8 +78,9 @@ namespace Books.Wpf.ViewModels
             set
             {
                 _selectedAuthorToAdd = value;
-                OnPropertyChanged();
-               
+                OnPropertyChanged(nameof(IsToSave));
+                OnPropertyChanged(nameof(IsAuthorToAddSelected));
+
             }
         }
 
@@ -101,17 +103,50 @@ namespace Books.Wpf.ViewModels
       await model.LoadData();
       return model;
     }
+        public bool IsAuthorToAddSelected => SelectedAuthorToAdd != null;
 
-    private Task LoadData()
+        public bool IsToSave => SelectedAuthors.Count > 0
+                                && !string.IsNullOrEmpty(Title)
+                                && !string.IsNullOrEmpty(BookPublishers)
+                                && !string.IsNullOrEmpty(Isbn);
+
+        private async Task LoadData()
     {
-      throw new NotImplementedException();
-    }
+            await using var uow = new UnitOfWork();
+            var avAuthors = await uow.Authors.GetAllAsync();
+            var allPublishers = await uow.Books.GetAllPublishersNamesAsync();
+            AvailableAuthors = new ObservableCollection<Author>(avAuthors);
+            AllPublishers = new ObservableCollection<string>(allPublishers);
+            if (_book.Id != 0)
+            {
+                _book = await uow.Books.GetByIdWithAuthorsAsync(_book.Id);
+                var seletedAuthor = _book.BookAuthors.Select(ba => ba.Author);
+                SelectedAuthors = new ObservableCollection<Author>(seletedAuthor);
+                var sauthors = _book.BookAuthors.Select(ba => ba.Author).ToList();
+                foreach (var author in sauthors)
+                {
+                    var auth = AvailableAuthors.FirstOrDefault(a => a.Id == author.Id);
+                    if (auth != null)
+                    {
+                        AvailableAuthors.Remove(auth);
+                    }
+                }
+            }
+            else
+            {
+                SelectedAuthors = new ObservableCollection<Author>();
+            }
+            BookPublishers = _book.Publishers;
+            Isbn = _book.Isbn;
+            Title = _book.Title;
+
+        }
 
     private void LoadCommands()
     {
-            CommandSaveBook = new RelayCommand(async c => await SaveBook(), c => !HasErrors);
-            CommandAddAuthor = new RelayCommand(c => AddAuthor(), c => SelectedAuthorToAdd != null);
-            CommandRemoveAuthor = new RelayCommand(c => RemoveAuthor(), c => SelectedAuthorToRemove != null);
+            CommandSaveBook = new RelayCommand(async _ => await SaveBook(), _ => IsToSave);
+            CommandAddAuthor = new RelayCommand(_ => AddAuthor(), _ => SelectedAuthorToAdd != null);
+            CommandRemoveAuthor = new RelayCommand(_ => RemoveAuthor(), _ => SelectedAuthorToRemove != null);
 
      }
 

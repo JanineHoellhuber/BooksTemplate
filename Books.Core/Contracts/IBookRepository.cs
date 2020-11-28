@@ -12,5 +12,6 @@ namespace Books.Core.Contracts
         Task<IEnumerable<Book>> GetFilteredByTitleAsync(string title);
         void Update(Book book);
         Task<Book> GetByIdWithAuthorsAsync(int id);
+        Task<IEnumerable<string>> GetAllPublishersNamesAsync();
     }
 }

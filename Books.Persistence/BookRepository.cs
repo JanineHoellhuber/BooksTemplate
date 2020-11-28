@@ -66,5 +66,15 @@ namespace Books.Persistence
                 .SingleOrDefaultAsync(b => b.Id == id);
         }
 
+        public async Task<IEnumerable<string>> GetAllPublishersNamesAsync() 
+        {
+            return await _dbContext.Books
+                        .Select(b => b.Publishers)
+                        .OrderBy(_ => _)
+                        .Distinct()
+                        .ToArrayAsync();
+        }
+
+
     }
 }
