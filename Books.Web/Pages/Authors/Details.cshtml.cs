@@ -20,11 +20,12 @@ namespace Books.Web.Pages.Authors
 
     public async Task<IActionResult> OnGet(int? id)
     {
-            
-            if (id == null)
+
+            if (!id.HasValue)
             {
-                return NotFound();
+                return Page();
             }
+
 
             AuthorInfo = await _uow.Authors.GetById(id.Value);
 

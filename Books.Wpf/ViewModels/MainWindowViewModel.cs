@@ -92,13 +92,15 @@ namespace Books.Wpf.ViewModels
 
         private async Task EditBook()
         {
-            Controller.ShowWindow(new BookEditCreateViewModel(Controller, SelectedBook.Entity));
+            var window = await BookEditCreateViewModel.Create(Controller, SelectedBook.Entity);
+            Controller.ShowWindow(window,true);
             await LoadBooks();
         }
 
         private async Task CreateBook()
         {
-            Controller.ShowWindow(new BookEditCreateViewModel(Controller, new Book()));
+            var window = await BookEditCreateViewModel.Create(Controller, new Book());
+            Controller.ShowWindow(window, true);
             await LoadBooks();
 
         }

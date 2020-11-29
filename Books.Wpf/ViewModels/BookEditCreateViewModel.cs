@@ -97,7 +97,7 @@ namespace Books.Wpf.ViewModels
             LoadCommands();
     }
 
-    public static async Task<BaseViewModel> Create(WindowController controller, Book book)
+    public static async Task<BaseViewModel> Create(IWindowController controller, Book book)
     {
       var model = new BookEditCreateViewModel(controller, book);
       await model.LoadData();

@@ -19,7 +19,7 @@ namespace Books.Web.Pages
       _uow = uow;
     }
 
-    public AuthorDto[] Authors { get; set; } 
+    public IEnumerable<AuthorDto> Authors { get; set; } 
     public async Task<IActionResult> OnGet()
     {
             Authors = await _uow.Authors.GetAuthorsOverviewAsync();
